@@ -1,1 +1,1 @@
-This is my first project of EECS240
+These are the R codes developed to meet the requirement in my Random Process class.
