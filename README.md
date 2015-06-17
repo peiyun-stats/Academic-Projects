@@ -1,5 +1,6 @@
 # Academic-Projects 
-## This is a collection of my selected academic projects, mostly written in R
+
+This is a collection of my selected academic projects, mostly written in R
 
 EECS240 - Random Process
 
