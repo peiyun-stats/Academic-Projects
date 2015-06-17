@@ -1,0 +1,53 @@
+EM=function(theta, x, r, y,max.iter=1000, small=1e-8){
+  for (iter in 1:max.iter){
+    theta.old = theta
+    theta = sum((x*y)/(x*theta.old+r))/sum(x)*theta.old 
+   
+    if (sum(abs(theta-theta.old))<small)
+      break
+  }
+  out = list (theta, iter)
+  names(out) = c("MLE","iteration.count")
+  out
+}
+
+x=c(1.41,1.84,1.64,0.85,1.32,1.97,1.70,1.02,1.84,0.92)
+y=c(13,17,6,3,7,13,8,7,5,8)
+r=c(0.94,0.70,0.16,0.38,0.40,0.57,0.24,0.27,0.60,0.81)
+
+EM(theta=1,x=x,y=y,r=r)
+
+theta = EM(theta=1,x=x,y=y,r=r)$MLE
+Iob = sum((x^2)*y/((x*theta+r)^2))
+Iom = sum(x*y/(theta*x+r)/theta)-Iob
+Ioc = Iob+Iom
+c(Iob,Iom,Ioc,Iom/Ioc)
+
+
+CD = function(sigma){
+  n = dim (sigma)[1]
+  L = matrix(rep(0,n^2),n,n)
+  for (j in 1:n){
+    for (i in j:n){
+      L[j,j] = sqrt(sigma[j,j]-sum(L[j,1:j-1]^2))
+      L[i,j] = (sigma[i,j]-sum(L[i,1:j-1]*L[j,1:j-1]))/L[j,j]
+    }
+  }
+  L
+}
+
+# Library(Matrix)
+CD(Hilbert(3))
+chol(Hilbert(3))
+
+diff = rep(NA, 1000)
+for (i in 1:1000){
+  diff[i] = max(CD(Hilbert(n))-t(chol(Hilbert(n))))
+}
+
+plot(1:1000,diff)
+
+a=1e3
+max(CD(Hilbert(a))-t(chol(Hilbert(a))))
+CD(Hilbert(14))
+chol(Hilbert(14))
